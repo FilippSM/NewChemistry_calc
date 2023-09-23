@@ -1,6 +1,7 @@
 
 //пары вискозиметров
-let arrPair = { 
+let pairsVisc = { 
+    
     1: { 
         100: 0.1111, 
         40: 0.2222
@@ -17,7 +18,6 @@ let arrPair = {
         100: 0.6666, 
         40: 0.6666
         } 
-}   
+};
 
-
-export default arrPair;
+export default pairsVisc;
