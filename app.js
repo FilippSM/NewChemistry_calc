@@ -49,20 +49,21 @@ function getConst40() {
     return Number(inputConst40.value);
 };
 
-// получение значение константы
-function getValueConst() {
-    // var const100 = getConst100();
-    // var const40 = getConst40();
-    
-    // return [const100, const40];
-
-    switch (3) {
+//получение значение константы
+function getValueConst(valueRadioBtn) {
+    switch (valueRadioBtn) {
         case 1:
-            selectPair.addEventListener('change', calcViscosityPair)   
+            var valuePair = calcViscosityPair()
+            var const100 = valuePair[0];
+            var const40 = valuePair[1];
+
+            return [const100, const40];  
             break;
         case 2:
-            selectNumbersVisc100.addEventListener('change', calcViscosityNumberVisc100)
-            selectNumbersVisc40.addEventListener('change', calcViscosityNumberVisc40)
+            var const100 = calcViscosityNumberVisc100();
+            var const40 = calcViscosityNumberVisc40();
+            
+            return [const100, const40];  
             break;
         case 3:
             var const100 = getConst100();
@@ -75,11 +76,11 @@ function getValueConst() {
     }  
 };
 
+function onButtonViscosityClick(valueRadioBtn) {
 
-function onButtonViscosityClick(a) {
-    console.log(a);
+    console.log(valueRadioBtn);
 
-    var valueConst = getValueConst();
+    var valueConst = getValueConst(valueRadioBtn);
         
     var const100 = valueConst[0];
     var const40 = valueConst[1];
@@ -90,13 +91,15 @@ function onButtonViscosityClick(a) {
 
     var result100 = time100 * const100;
     var result40 = time40 * const40;
-    
+
+    var valueFixed100 = 3-Math.floor(Math.log10(result100));
+    var valueFixed40 = 3-Math.floor(Math.log10(result40));
+    var result100 = +result100.toFixed(valueFixed100);
+    var result40 = +result40.toFixed(valueFixed40);
+
     document.getElementById('resultViscosity100').value = result100;
     document.getElementById('resultViscosity40').value = result40;
 };
-
-//buttonViscosity.addEventListener('click', getValueConst);
-//buttonViscosity.addEventListener('click', onButtonViscosityClick);
 
 //получение значение пары вискозиметров
 var selectPair = document.getElementById('pair');
@@ -110,7 +113,8 @@ function getValuePair() {
 function calcViscosityPair() {
     let valuePair = getValuePair();
     let const100 = pairsVisc[valuePair][100];
-    console.log(const100);
+    let const40 = pairsVisc[valuePair][40];
+    return [const100, const40];
 };
 
 selectPair.addEventListener('change', calcViscosityPair)
@@ -133,12 +137,14 @@ function calcViscosityNumberVisc100() {
     let numberVisc100 = getValueNumberVisc100();
     let const100 = numbersVisc[numberVisc100];
     console.log(const100);
+    return const100;  
 };
 
 function calcViscosityNumberVisc40() {
     let numberVisc40 = getValueNumberVisc40();
     let const40 = numbersVisc[numberVisc40];
     console.log(const40);
+    return const40;  
 };
 
 selectNumbersVisc100.addEventListener('change', calcViscosityNumberVisc100)
@@ -158,8 +164,6 @@ var radioBtns = document.querySelectorAll('input[name="radio"]');
 
 function onRadioBtnViscosityClick() {
     let selected = document.querySelector('input[name="radio"]:checked').value;
-    //console.log(selected);
-    //calcViscosity(Number(selected));
     let valueRadioBtn = Number(selected);
     buttonViscosity.addEventListener('click', () => onButtonViscosityClick(valueRadioBtn));
 
@@ -168,32 +172,3 @@ function onRadioBtnViscosityClick() {
 radioBtns.forEach(radioBtn => {
     radioBtn.addEventListener("change", onRadioBtnViscosityClick);
 });
-
-
-
-//выполнение расчета вязкости по значению радиокнопки
-
-
-// function calcViscosity(valueRadioBtn) {
-//     console.log(valueRadioBtn);
-
-
-//     switch (valueRadioBtn) {
-//         case 1:
-//             alert(1111);
-//             buttonViscosity.addEventListener('click', onButtonViscosityClick);
-//             break;
-//         case 2:
-//             alert(2222);
-//             break;
-//         case 3:
-//             alert(3333);
-//             //getValueConst();
-//             buttonViscosity.addEventListener('click', () => onButtonViscosityClick(valueRadioBtn));
-//             break;
-//         default:
-//             alert("Error");
-//     }  
-// };
-
-//calcViscosity(3);
