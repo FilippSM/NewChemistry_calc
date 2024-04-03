@@ -3,31 +3,24 @@ import numbersVisc from './js/bdNumberVisc.js';
 import numbersIV from './js/bdNumberIV.js';
 import valuesDensity from './js/bdValueDensity.js';
 
-var buttonEvapor = document.getElementById('buttonEvapor');
+//calc Evaporation by the Noack Method
+const buttonEvapor = document.getElementById('buttonEvapor');
 
 function onButtonEvaporClick(event) {
-    var inputCrucible = document.getElementById('crucible');
-    var inputSample = document.getElementById('sample');
-    var inputSampleEvapor = document.getElementById('sampleEvapor');
+    let weigtCrucible = parseFloat(document.getElementById('crucible').value);
+    let weigtSample = parseFloat(document.getElementById('sample').value);
+    let weigtSampleEvapor = parseFloat(document.getElementById('sampleEvapor').value);
 
-
-    var crucible = parseFloat(inputCrucible.value);
-    var sample = parseFloat(inputSample.value);
-    var sampleEvapor = parseFloat(inputSampleEvapor.value);
-
-    var crucibleSample = crucible + sample;
-    var result = (crucibleSample - sampleEvapor) / sample * 100;
+    let  weigtCrucibleSample =  weigtCrucible + weigtSample;
+    let result = (weigtCrucibleSample - weigtSampleEvapor) / weigtSample * 100;
 
     result = result.toFixed(1);
-
     document.getElementById('result').value = result;
 };
 
 buttonEvapor.addEventListener('click', onButtonEvaporClick)
 
-//расчет взкости
-
-
+//calc Viscosity
 let buttonDensity = document.getElementById('buttonDensity');
 
 function onButtonDensityClick(event) {
