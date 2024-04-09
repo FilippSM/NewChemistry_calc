@@ -165,13 +165,15 @@ function getValueNumberVisc40() {
 
 function calcViscosityNumberVisc100(event) {
     let numberVisc100 = getValueNumberVisc100();
-    let const100 = numbersVisc[numberVisc100];
+    //let const100 = numbersVisc[numberVisc100];
+    let const100 = numbersVisc[numberVisc100].constant;
     return const100;  
 };
 
 function calcViscosityNumberVisc40(event) {
     let numberVisc40 = getValueNumberVisc40();
-    let const40 = numbersVisc[numberVisc40];
+    //let const40 = numbersVisc[numberVisc40];
+    let const40 = numbersVisc[numberVisc40].constant;
     return const40;  
 };
 
