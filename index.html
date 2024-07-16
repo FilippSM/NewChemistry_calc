@@ -1,78 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Document</title>
-        <style>
-            body {
-                background: #f2f4f5;
-            }
-
-            .input-block {
-                display: grid;
-                grid-template-columns: 200px;
-                padding: .5em;
-            }
-
-            .output-block {
-                display: grid;
-                grid-template-columns: 200px;
-                padding: .5em;
-            }
-
-            .input-block_hide {
-                display: none;
-            }
-
-            input:focus {
-                background-color: rgba(69, 92, 204, 0.2);
-            }
-
-            input:hover {
-                background-color: rgba(69, 92, 204, 0.2);
-            }
-
-            button{
-                outline: none;
-                border: none;
-                background-color: tomato;
-            }
-
-            button:focus {
-                /* background-color: yellow; */
-                outline: 0.2em solid black;
-            }
-
-        </style>
+        <link rel="stylesheet" href="style.css">
     </head>
 
     <body>
-        <div class="evaporation-calculator">
-            <h2>Определение испаряемости по NOAK по ГОСТ 32330</h2>
-            <div class="inputs-block">
-                <div class="input-block">
-                    <label for="crucible">Вес пустого тигля, г</label>
-                    <input type="text" id="crucible">
+      <!-- <form action="#" name="form"> -->
+           <!-- <form> -->
+            <div class="evaporation-calculator">
+                <h2>Определение испаряемости по NOAK по ГОСТ 32330</h2>
+                <div class="inputs-block">
+                    <div class="input-block">
+                        <label for="crucible">Вес пустого тигля, г</label>
+                        <input type="text" id="crucible" class="evapor" placeholder="Введите вес" required>
+                    </div>
+                    <div class="input-block">
+                        <label for="sample">Вес образца, г</label>
+                        <input type="text" id="sample" class="evapor" placeholder="Введите вес" required>
+                    </div>
+                    <div class="input-block">
+                        <label for="sampleEvapor">Вес тигля с образцом после выпаривания, г</label>
+                        <input type="text" id="sampleEvapor" class="evapor" placeholder="Введите вес" required>
+                    </div>
                 </div>
-                <div class="input-block">
-                    <label for="sample">Вес образца, г</label>
-                    <input type="text" id="sample">
+                <div class="output-block">
+                    <label for="result">Результат, %</label>
+                    <input type="text" id="result">
                 </div>
-                <div class="input-block">
-                    <label for="sampleEvapor">Вес тигля с образцом после выпаривания, г</label>
-                    <input type="text" id="sampleEvapor">
-                </div>
+     <!--            <div class="button">
+                    <button id="buttonEvapor">Расчет</button>
+                </div> -->
             </div>
-            <div class="output-block">
-                <label for="result">Результат, %</label>
-                <input type="text" id="result">
-            </div>
-            <div class="button">
-                <button id="buttonEvapor">Расчет</button>
-            </div>
-        </div>
+       <!--  </form> -->
+
         <div class="density-calculator">
             <h2>Определение плотности по ГОСТ 3900</h2>
             <div class="inputs-block">
@@ -95,6 +58,8 @@
             <div class="output-block">
                 <label for="resultDensity">Плотность при температуре 20 °C, кг/м<sup>3</sup></label>
                 <input type="text" id="resultDensity">
+                <label for="resultDensity15">Плотность при температуре 15 °C, кг/м<sup>3</sup></label>
+                <input type="text" id="resultDensity15">
             </div>
             <div class="button">
                 <button id="buttonDensity">Расчет</button>
@@ -128,14 +93,14 @@
                 <div class="input-block_hide" id="block-2">
                     <div class="input-block">
                         <label for="number100">Вискозиметр на 100 °C</label>
-                        <select id="number100">
+                        <select id="number100" size="5">
 <!--                             <option value="1111">I</option>
                             <option value="2222">II</option>
                             <option value="3333">III</option>
                             <option value="4444">IV</option> -->
                         </select>
                         <label for="number40">Вискозиметр на 40 °C</label>
-                        <select id="number40">
+                        <select id="number40" size="5">
 <!--                             <option value="1111">I</option>
                             <option value="2222">II</option>
                             <option value="3333">III</option>
@@ -189,7 +154,48 @@
             <div class="button">
                 <button id="buttonIV">Расчет</button>
             </div>
-        </div>    
+        </div>
+
+        <!-- подбор вискозиметров по истечению -->
+     <!--    <div class="timeViscosity">
+            <h2>Подбор вискозиметров по истечению</h2>
+            <div class="inputs-block">
+                <div class="input-block">
+                    <label for="time">Время истечения не менее, с</label>
+                    <input type="text" class="timeV" id="timeV">
+                </div>
+                <div class="input-block">
+                    <label for="viscosity">Предпологаемая вязкость, сПа</label>
+                    <input type="text" class="viscosity" id="viscosity">
+                </div>
+            </div> 
+            <div class="output-block" id="resultIVTwo">
+                <p id="resultTimeViscosity"></p>
+            </div>
+            <div class="button">
+                <button id="buttonTimeViscosity">Расчет</button>
+            </div>
+        </div> -->
+        <div class="timeViscosity">
+            <h2>Подбор вискозиметров по истечению</h2>
+            <div class="inputs-block">
+                <div class="input-block">
+                    <label for="time">Время истечения не менее, с</label>
+                    <input type="text" class="timeV" id="timeV">
+                </div>
+                <div class="input-block">
+                    <label for="viscosity">Предпологаемая вязкость, сПа</label>
+                    <input type="text" class="viscosity" id="viscosity">
+                </div>
+            </div> 
+            <div class="" id="resultIVTwo">
+                <p id="resultTimeViscosity"></p>
+            </div>
+            <div class="button">
+                <button id="buttonTimeViscosity">Расчет</button>
+            </div>
+        </div>
+        
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
         <script type="module" src="app.js"></script>
     </body>

@@ -4,7 +4,7 @@ import numbersIV from './js/bdNumberIV.js';
 import valuesDensity from './js/bdValueDensity.js';
 
 //calc Evaporation by the Noack Method
-const buttonEvapor = document.getElementById('buttonEvapor');
+/* const buttonEvapor = document.getElementById('buttonEvapor');
 
 function onButtonEvaporClick(event) {
     let weigtCrucible = parseFloat(document.getElementById('crucible').value);
@@ -18,32 +18,67 @@ function onButtonEvaporClick(event) {
     document.getElementById('result').value = result;
 };
 
-buttonEvapor.addEventListener('click', onButtonEvaporClick)
+buttonEvapor.addEventListener('click', onButtonEvaporClick) */
 
-//calc Viscosity
+let inputValues = document.querySelectorAll('.evapor');
+
+for (let i = 0; i < inputValues.length; i++) {
+    inputValues[i].addEventListener('keyup', onButtonEvaporClick);
+}
+
+function onButtonEvaporClick() {
+    let weigtCrucible = parseFloat(document.getElementById('crucible').value);
+    let weigtSample = parseFloat(document.getElementById('sample').value);
+    let weigtSampleEvapor = parseFloat(document.getElementById('sampleEvapor').value);
+
+    let  weigtCrucibleSample =  weigtCrucible + weigtSample;
+    let result = (weigtCrucibleSample - weigtSampleEvapor) / weigtSample * 100;
+
+    result = result.toFixed(1);
+
+  /*   console.log(result);
+    console.log(result !== result);
+    console.log(NaN !== NaN);
+    let a = result === result;
+    if (a === true) {
+        document.getElementById('result').value = "Ведите данные";
+    } else {
+        document.getElementById('result').value = result;    
+    } */
+
+    document.getElementById('result').value = result;
+}
+
+//calc Density
 let buttonDensity = document.getElementById('buttonDensity');
 
 function onButtonDensityClick(event) {
     let inputDensity= document.getElementById('density');
     let inputTemperature = document.getElementById('temperature');
-    let valueDensity = parseFloat(inputDensity.value)/1000;
+    let valueDensity = parseInt(inputDensity.value.replace(',','.'))/1000;
+    let valueDensityFloat = parseFloat(inputDensity.value.replace(',','.'))/1000;
+    valueDensityFloat = +valueDensityFloat.toFixed(4)
+    
+
     let valueTemperature = parseFloat(inputTemperature.value.replace(',','.'));
     let inputCorrection = document.getElementById('hydrometer');
     let valueCorrection = parseFloat(inputCorrection.value);
 
     let densityTable = valuesDensity[valueDensity][valueTemperature];
+    let densityTable15 = valuesDensity[valueDensity][valueTemperature+5]; //пересчет плотности при 15 градусах
 
+    let density = densityTable +(valueDensityFloat - valueDensity) + valueCorrection;
+    let density15 = densityTable15 +(valueDensityFloat - valueDensity) + valueCorrection;
+ 
 
-    //Math.floor(densityTable*1000)/1000) - оуруглене до 4-го знака после запятой
-    let density = (densityTable - Math.floor(densityTable*1000)/1000) + densityTable + valueCorrection;
-    
-    density = density * 1000;
-    density = density.toFixed(1);
-
+    density = (density * 1000).toFixed(1);
+    density15 = (density15 * 1000).toFixed(1);
+ 
 
 
 
     document.getElementById('resultDensity').value = density;
+    document.getElementById('resultDensity15').value = density15;
 }
 
 
@@ -59,20 +94,55 @@ var inputConst40 = document.getElementById('const40');
 
 
 function getTime100() {
-    return Number(inputTime100.value);
+    let time100 = inputTime100.value.replace(',','.'); 
+
+    return convertToSeconds(time100);
 };
 
 function getTime40() {
-    return Number(inputTime40.value);
+    let time40 = inputTime40.value.replace(',','.'); 
+
+    return convertToSeconds(time40);
 };
 
 function getConst100() {
-    return Number(inputConst100.value);
+    return Number(inputConst100.value.replace(',','.'));
 };
 
 function getConst40() {
-    return Number(inputConst40.value);
+    return Number(inputConst40.value.replace(',','.'));
 };
+
+
+//конвертирование в секунды
+function convertToSeconds(timeString) {
+    // Разделяем строку на части по двоеточию
+    let timeParts = timeString.split(':');
+
+    if (timeParts.length < 2) {
+        let minutes = parseFloat(timeParts[0]);
+
+        return minutes
+    } else {
+        // Получаем минуты и секунды
+        let minutes = parseInt(timeParts[0]);
+        let seconds = parseInt(timeParts[1]);
+
+        let milliSeconds = parseFloat(timeParts[2])
+
+        //условия для ввода секунд 1 до 10 от 10 до 100
+        if (Math.log10(milliSeconds) < 1) {
+            milliSeconds = parseFloat(timeParts[2] / 10)
+        } else {
+            milliSeconds = parseFloat(timeParts[2] / 100)
+        }
+
+        // Вычисляем общее количество секунд
+        let totalSeconds = minutes * 60 + seconds + milliSeconds;
+
+        return totalSeconds;
+    }
+}
 
 //получение значение константы
 function getValueConst(valueRadioBtn) {
@@ -120,6 +190,7 @@ function onButtonViscosityClick(valueRadioBtn) {
     //округление до четырех значащих цифр
     var valueFixed100 = 3-Math.floor(Math.log10(result100));
     var valueFixed40 = 3-Math.floor(Math.log10(result40));
+
     var result100 = +result100.toFixed(valueFixed100);
     var result40 = +result40.toFixed(valueFixed40);
 
@@ -133,6 +204,11 @@ function onButtonViscosityClick(valueRadioBtn) {
 
 //получение значение пары вискозиметров
 var selectPair = document.getElementById('pair');
+//console.log(selectPair);
+
+let cc = selectPair.value
+//console.log(cc);
+
 
 function getValuePair() {
     let a = (selectPair.value);
@@ -226,7 +302,7 @@ const selectVisc100 = document.querySelector('#number100');
 for(var key in numbersVisc) {
     const option = document.createElement('option');
     option.value = key;
-    option.text = key;
+    option.text = `${key}, d= ${numbersVisc[key].diameter}`;
     
     selectVisc100.append(option);
 };
@@ -236,7 +312,7 @@ const selectVisc40 = document.querySelector('#number40');
 for(var key in numbersVisc) {
     const option = document.createElement('option');
     option.value = key;
-    option.text = key;
+    option.text = `${key}, d= ${numbersVisc[key].diameter}`;
     
     selectVisc40.append(option);
 };
@@ -292,14 +368,11 @@ function onButtonIVClick(valueY, valueU) {
                     let valueL = numbersIV[valueY][0]; // вязкость при температуре 40 из табл.
                     let valueH = numbersIV[valueY][1]; // вязкость при температуре 100 из табл.
                     let valueIV = calculationIV(valueL, valueH, valueU);//расчет индекса вязкости
-    
-                    console.log(valueIV);
 
-                    
-                    if (valueIV < 100) {
+                    if (valueIV <= 100) {
                         //document.getElementById('resultIV').value = valueIV;
                         return valueIV;
-                    }else if (valueIV >= 100) {
+                    }else if (valueIV > 100) {
                         let valueH = numbersIV[valueY][1]; // вязкость при температуре 100 из табл.
                         let valueIV = calculationIVMore100(valueH, valueY, valueU);
                         console.log(1);
@@ -315,8 +388,6 @@ function onButtonIVClick(valueY, valueU) {
         };
         
         let valueIV = getValue();
-
-        console.log(valueIV);
         
         if (valueIV == false) { // если значения нет в таблице
             //расчет интерполяцией
@@ -327,10 +398,10 @@ function onButtonIVClick(valueY, valueU) {
             let valueH = calculationInterpolation(valueY , switchValueH);
 
             let valueIV = calculationIV(valueL, valueH, valueU);
-            if (valueIV < 100) {
+            if (valueIV <= 100) {
                 //document.getElementById('resultIV').value = valueIV;
                 return valueIV;          
-            } else if (valueIV >= 100) {
+            } else if (valueIV > 100) {
                 let valueIV = calculationIVMore100(valueH, valueY, valueU);
                 //document.getElementById('resultIV').value = valueIV;
                 return valueIV;           
@@ -342,10 +413,10 @@ function onButtonIVClick(valueY, valueU) {
         let valueL = 0.8353*Math.pow(valueY, 2) + 14.67*valueY - 216; //формула 2
         let valueH = 0.1684*Math.pow(valueY, 2) + 11.85*valueY - 97; //формула 3
         let valueIV = calculationIV(valueL, valueH, valueU);
-        if (valueIV < 100) {
+        if (valueIV <= 100) {
             //document.getElementById('resultIV').value = valueIV;
             return valueIV; 
-        } else if (valueIV >= 100) {
+        } else if (valueIV > 100) {
             let valueH = 0.1684*Math.pow(valueY, 2) + 11.85*valueY - 97;
             let valueIV = calculationIVMore100(valueH, valueY, valueU);
             //document.getElementById('resultIV').value = valueIV;
@@ -356,10 +427,10 @@ function onButtonIVClick(valueY, valueU) {
         let valueH = valueY*(1.35017 + 0.59482*valueY); //формула 5
         let valueIV = calculationIV(valueL, valueH, valueU);
         
-        if (valueIV < 100) {
+        if (valueIV <= 100) {
             //document.getElementById('resultIV').value = valueIV;
             return valueIV; 
-        } else if (valueIV >= 100) {
+        } else if (valueIV > 100) {
             let valueH = valueY*(1.35017 + 0.59482*valueY);
             let valueIV = calculationIVMore100(valueH, valueY, valueU);
             //document.getElementById('resultIV').value = valueIV;
@@ -482,4 +553,100 @@ function onButtonIVClick(valueY, valueU) {
 
 //buttonIV.addEventListener('click', onButtonIVClick);
 
+//подбор вискозиметров по времени истечения
+let buttonTimeViscosity = document.getElementById('buttonTimeViscosity');
 
+function onButtonTimeViscosity(event) {
+    let timeViscosity = document.getElementById('timeV').value;
+    timeViscosity = timeViscosity.replace(',','.');
+    let viscosity = document.getElementById('viscosity').value;
+    viscosity = viscosity.replace(',','.');
+
+    let arrayString = 'Список вискозиметров: ' + '<br>';
+
+    for(var key in numbersVisc) {
+        //вискозиметры без кали,ровки
+        if(timeViscosity < viscosity/numbersVisc[key].constant && numbersVisc[key].calibration === undefined){
+          let timeViscosity = viscosity/numbersVisc[key].constant;
+      
+          arrayString += `№: ${key} d=${numbersVisc[key].diameter}, время истечения: ${timeViscosity.toFixed(2)}` + '<br>';
+          document.getElementById('resultTimeViscosity').innerHTML = arrayString;
+        }
+      
+        //вискозиметры с калибровкой
+        if(timeViscosity < viscosity/numbersVisc[key].constant && numbersVisc[key].calibration === true){
+          let timeViscosity = viscosity/numbersVisc[key].constant;
+      
+          arrayString += `№: ${key} d=${numbersVisc[key].diameter}, время истечения: ${timeViscosity.toFixed(2)}, откалиброванный` + '<br>';
+          document.getElementById('resultTimeViscosity').innerHTML = arrayString;
+        }
+      };
+}
+
+
+buttonTimeViscosity.addEventListener('click', onButtonTimeViscosity)
+
+
+const body = document.querySelector("body");
+
+const inputElementIn = document.createElement('input');
+//gameElement.innerText = `Игра: ${game.name}`;
+inputElementIn.className = 'input'; 
+body.append(inputElementIn)
+
+const inputElementOut = document.createElement('input');
+inputElementOut.className = 'input'; 
+body.append(inputElementOut)
+
+/* gamesFromServer.forEach((game) => {
+  const gameElement = document.createElement('div');
+  gameElement.innerText = `Игра: ${game.name}`;
+  gameElement.className = 'game-element';
+
+  body.append(gameElement)
+}) */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* function convertToSeconds(timeString) {
+    // Разделяем строку на части по двоеточию
+    let timeParts = timeString.split(':');
+    
+    if (timeParts.length < 2) {
+      let minutes = parseInt(timeParts[0]);
+      
+      return minutes
+    } else {
+      // Получаем минуты и секунды
+      let minutes = parseInt(timeParts[0]);
+      let seconds = parseInt(timeParts[1]);
+      let milliSeconds = parseFloat(timeParts[2]/10);
+    
+      // Вычисляем общее количество секунд
+      let totalSeconds = minutes * 60 + seconds + milliSeconds;
+    
+      return totalSeconds;
+    }
+   }
+    
+    let time = '3'; // 5 минут 30 секунд
+    let totalSeconds = convertToSeconds(time);
+    console.log(totalSeconds); // Выведет 330 (5 * 60 + 30)
+    
+    time = '3:48:7';
+    totalSeconds = convertToSeconds(time);
+    console.log(totalSeconds); // Выведет 75 (1 * 60 + 15) */
