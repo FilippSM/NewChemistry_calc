@@ -562,14 +562,53 @@ function onButtonTimeViscosity(event) {
     let viscosity = document.getElementById('viscosity').value;
     viscosity = viscosity.replace(',','.');
 
+    let optionVisc = document.getElementById('optionVisc').value;
+    console.log(optionVisc);
+
     let arrayString = 'Список вискозиметров: ' + '<br>';
 
-    for(var key in numbersVisc) {
-        //вискозиметры без кали,ровки
+    //условия для пожбора вискозиметров
+    for (var key in numbersVisc) {
+        if (optionVisc === "calibration" && timeViscosity < viscosity / numbersVisc[key].constant && numbersVisc[key].calibration === true) {
+          let timeViscosity = viscosity / numbersVisc[key].constant;
+          arrayString += `№: ${numbersVisc[key].id} d=${numbersVisc[key].diameter}, время истечения: ${timeViscosity.toFixed(2)}, откалиброванный` + '<br>';
+          document.getElementById('resultTimeViscosity').innerHTML = arrayString;
+        } 
+    
+        if (optionVisc === "noCalibration" && timeViscosity < viscosity / numbersVisc[key].constant && numbersVisc[key].calibration === undefined) {
+          let timeViscosity = viscosity / numbersVisc[key].constant;
+          arrayString += `№: ${numbersVisc[key].id} d=${numbersVisc[key].diameter}, время истечения: ${timeViscosity.toFixed(2)}` + '<br>';
+          document.getElementById('resultTimeViscosity').innerHTML = arrayString;
+        } 
+
+        if (optionVisc === "all") {
+          //вискозиметры без калибровки
+          if (timeViscosity < viscosity / numbersVisc[key].constant && numbersVisc[key].calibration === undefined) {
+            let timeViscosity = viscosity / numbersVisc[key].constant;
+            arrayString += `№: ${numbersVisc[key].id} d=${numbersVisc[key].diameter}, время истечения: ${timeViscosity.toFixed(2)}` + '<br>';
+            document.getElementById('resultTimeViscosity').innerHTML = arrayString;
+            console.log(arrayString);
+          }
+    
+          //вискозиметры с калибровкой
+          if (timeViscosity < viscosity / numbersVisc[key].constant && numbersVisc[key].calibration === true) {
+            let timeViscosity = viscosity / numbersVisc[key].constant;
+            arrayString += `№: ${numbersVisc[key].id} d=${numbersVisc[key].diameter}, время истечения: ${timeViscosity.toFixed(2)}, откалиброванный` + '<br>';
+            document.getElementById('resultTimeViscosity').innerHTML = arrayString;
+          }
+        };
+      }
+
+
+
+
+
+    /* for(var key in numbersVisc) {
+        //вискозиметры без калибровки
         if(timeViscosity < viscosity/numbersVisc[key].constant && numbersVisc[key].calibration === undefined){
           let timeViscosity = viscosity/numbersVisc[key].constant;
       
-          arrayString += `№: ${key} d=${numbersVisc[key].diameter}, время истечения: ${timeViscosity.toFixed(2)}` + '<br>';
+          arrayString += `№: ${numbersVisc[key].id} d=${numbersVisc[key].diameter}, время истечения: ${timeViscosity.toFixed(2)}` + '<br>';
           document.getElementById('resultTimeViscosity').innerHTML = arrayString;
         }
       
@@ -577,10 +616,10 @@ function onButtonTimeViscosity(event) {
         if(timeViscosity < viscosity/numbersVisc[key].constant && numbersVisc[key].calibration === true){
           let timeViscosity = viscosity/numbersVisc[key].constant;
       
-          arrayString += `№: ${key} d=${numbersVisc[key].diameter}, время истечения: ${timeViscosity.toFixed(2)}, откалиброванный` + '<br>';
+          arrayString += `№: ${numbersVisc[key].id} d=${numbersVisc[key].diameter}, время истечения: ${timeViscosity.toFixed(2)}, откалиброванный` + '<br>';
           document.getElementById('resultTimeViscosity').innerHTML = arrayString;
         }
-      };
+      }; */
 }
 
 
@@ -607,8 +646,33 @@ body.append(inputElementOut)
 }) */
 
 
+/* 
+  function onButtonTimeViscosity(event) {
+    let timeViscosity = document.getElementById('timeV').value;
+    timeViscosity = timeViscosity.replace(',','.');
+    let viscosity = document.getElementById('viscosity').value;
+    viscosity = viscosity.replace(',','.');
 
+    let arrayString = 'Список вискозиметров: ' + '<br>';
 
+    for(var key in numbersVisc) {
+        //вискозиметры без кали,ровки
+        if(timeViscosity < viscosity/numbersVisc[key].constant && numbersVisc[key].calibration === undefined){
+          let timeViscosity = viscosity/numbersVisc[key].constant;
+      
+          arrayString += `№: ${key} d=${numbersVisc[key].diameter}, время истечения: ${timeViscosity.toFixed(2)}` + '<br>';
+          document.getElementById('resultTimeViscosity').innerHTML = arrayString;
+        }
+      
+        //вискозиметры с калибровкой
+        if(timeViscosity < viscosity/numbersVisc[key].constant && numbersVisc[key].calibration === true){
+          let timeViscosity = viscosity/numbersVisc[key].constant;
+      
+          arrayString += `№: ${key} d=${numbersVisc[key].diameter}, время истечения: ${timeViscosity.toFixed(2)}, откалиброванный` + '<br>';
+          document.getElementById('resultTimeViscosity').innerHTML = arrayString;
+        }
+      };
+} */
 
 
 
