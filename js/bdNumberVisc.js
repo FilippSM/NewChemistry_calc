@@ -21,7 +21,7 @@ let numbersVisc = [
     { id: 145, diameter: 1.16, constant: 0.1056 },
     { id: 691, diameter: 1.16, constant: 0.09725 },
     { id: 5, diameter: 1.52, constant: 0.337121, calibration: true },
-    { id: 3595, diameter: 1.52, constant: 0.333743 },
+    { id: 3595, diameter: 1.52, constant: 0.333743, calibration: true},
     { id: 3555, diameter: 1.52, constant: 0.332547, },
     { id: 745, diameter: 2.10, constant: 1.129459 },
     { id: 3932, diameter: 2.10, constant: 0.940120 },
