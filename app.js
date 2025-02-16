@@ -302,7 +302,7 @@ const selectVisc100 = document.querySelector('#number100');
 for(var key in numbersVisc) {
     const option = document.createElement('option');
     option.value = key;
-    option.text = `${key}, d= ${numbersVisc[key].diameter}`;
+    option.text = `${numbersVisc[key].id}, d= ${numbersVisc[key].diameter}`;
     
     selectVisc100.append(option);
 };
@@ -312,7 +312,7 @@ const selectVisc40 = document.querySelector('#number40');
 for(var key in numbersVisc) {
     const option = document.createElement('option');
     option.value = key;
-    option.text = `${key}, d= ${numbersVisc[key].diameter}`;
+    option.text = `${numbersVisc[key].id}, d= ${numbersVisc[key].diameter}`;
     
     selectVisc40.append(option);
 };
@@ -459,12 +459,14 @@ function onButtonIVClick(valueY, valueU) {
     function roundIV(valueIV) {
         valueIV = +valueIV.toFixed(1);
         valueIV = valueIV * 10;
+
         if (valueIV % 5 == 0) {//проверка на первую значащую цифру, равна ли она пяти
             //-округляем до целого четного числа
+            console.log(valueIV);
             valueIV = valueIV / 10;
             let valueIVFloor = Math.floor(valueIV);
             let valueIVCeil = Math.ceil(valueIV);
-            if (valueIV % 2 == 0) {//проверка в какую сторону округлять, четное вниз
+            if (valueIVFloor % 2 == 0) {//проверка в какую сторону округлять, четное вниз
                 return valueIVFloor;
             } else {//четное вверх
                 return valueIVCeil;
