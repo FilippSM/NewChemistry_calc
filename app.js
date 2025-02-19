@@ -630,14 +630,14 @@ buttonTimeViscosity.addEventListener('click', onButtonTimeViscosity)
 
 const body = document.querySelector("body");
 
-const inputElementIn = document.createElement('input');
+/* const inputElementIn = document.createElement('input');
 //gameElement.innerText = `Игра: ${game.name}`;
 inputElementIn.className = 'input'; 
 body.append(inputElementIn)
 
 const inputElementOut = document.createElement('input');
 inputElementOut.className = 'input'; 
-body.append(inputElementOut)
+body.append(inputElementOut) */
 
 /* gamesFromServer.forEach((game) => {
   const gameElement = document.createElement('div');
